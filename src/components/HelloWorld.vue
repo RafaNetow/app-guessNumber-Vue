@@ -1,7 +1,7 @@
 <template>
   <div class="container d-flex justify-content-center">
 
-    <div class="spinner-border text-primary" role="status" v-if="showSpinner">
+    <div class="spinner-border text-primary spineer" role="status" v-if="showSpinner">
       <span class="sr-only">Loading...</span>
     </div>
 
@@ -59,28 +59,30 @@ export default {
   methods: {
     getNumberRandom: function () {
       this.numberRandom = Math.floor(Math.random() * 100)
+      setTimeout(() => this.showSpinner = false, 500)
     },
     viewWindow: function (window) {
-      debugger
       if (window === 'insertNameUser') {
         this.showSpinner = true
-        setTimeout(
-          function () {
-            this.showSpinner = false
-            this.getNumberRandom()
-            this.window = window
-          }, 3000)
-      } else {
-        this.window = window
+        this.getNumberRandom()
       }
+      this.window = window
     },
     guessNumber: function () {
-      debugger
       if (this.numberRandom < Number(this.guessNumberForUser)) {
-        this.$swal('Estoy pensando un número más bajo!!!', 'danger')
+        this.attempsNumber++
+        this.$swal.fire({
+          type: 'error',
+          title: 'Oops...',
+          text: 'Estoy pensando un número más bajo!!!`'
+        })
         this.attempsNumber++
       } else if (this.numberRandom > Number(this.guessNumberForUser)) {
-        this.$swal('Estoy pensando un número más alto!!!', 'warning')
+        this.$swal.fire({
+          type: 'error',
+          title: 'Oops...',
+          text: 'Estoy pensando un número más alto!!!`'
+        })
         this.attempsNumber++
       } else if (this.numberRandom === Number(this.guessNumberForUser)) {
         this.$swal(`Correcto!!! ${this.nameGamer}`, `Lo has logrado en ${this.attempsNumber} intentos`, `success`)
@@ -114,5 +116,10 @@ li {
 }
 a {
   color: #42b983;
+}
+.spineer {
+  position: relative;
+  left: 27%;
+  margin-top: 10%;
 }
 </style>
